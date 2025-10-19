@@ -31,7 +31,7 @@ POSTGRES_DB=django
 DB_HOST=db
 DB_PORT=5432
 
-SECRET_KEY=django-insecure-cg6*%6d51ef8f#4!r3*$vmxm4)abgjw8mo!4y-q*uq1!4$-89$
+SECRET_KEY=*Ваш секретный ключ*
 DEBUG=False
 
 ALLOWED_HOSTS=mykittygram67dev.servemp3.com,127.0.0.1,localhost
@@ -72,10 +72,10 @@ docker compose up -d --build
 
 Создайте файл `tests.yml` в корне:
 ```yaml
-repo_owner: LessTalkRus
-kittygram_domain: https://mykittygram67dev.servemp3.com
-taski_domain: https://taskiserver.sytes.net
-dockerhub_username: lesstalkrus
+repo_owner: your_github_username
+kittygram_domain: https://yourkittygram.domain.com
+taski_domain: https://yourtaski.domain.com
+dockerhub_username: your_dockerhub_username
 ```
 
 Локальный запуск тестов:
