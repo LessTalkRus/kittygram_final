@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 volumes:
   pg_data:
@@ -11,23 +11,24 @@ services:
     env_file: .env
     volumes:
       - pg_data:/var/lib/postgresql/data
+
   backend:
-    build: ./backend/
+    image: lesstalkrus/kittygram_backend
     env_file: .env
     depends_on:
       - db
     volumes:
       - static:/backend_static
       - media:/media
+
   frontend:
-    env_file: .env
-    build: ./frontend/
+    image: lesstalkrus/kittygram_frontend
     command: cp -r /app/build/. /frontend_static/
     volumes:
       - static:/frontend_static
+
   gateway:
-    build: ./nginx/
-    env_file: .env
+    image: lesstalkrus/kittygram_gateway
     depends_on:
       - backend
     ports:
