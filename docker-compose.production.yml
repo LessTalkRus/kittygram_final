@@ -31,6 +31,7 @@ services:
     image: lesstalkrus/kittygram_gateway
     depends_on:
       - backend
+      - frontend
     ports:
       - 9000:80
     volumes:

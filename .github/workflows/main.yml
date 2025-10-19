@@ -1,10 +1,9 @@
-# .github/workflows/main.yml
 name: Main Kittygram workflow
 
 on:
-  push:
+  push:        # тесты — на любой пуш (любая ветка)
     branches:
-      - main
+      - '**'
 
 jobs:
   tests:
@@ -25,6 +24,10 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
     env:
       POSTGRES_USER: django_user
       POSTGRES_PASSWORD: django_password
@@ -40,7 +43,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         working-directory: backend
@@ -77,6 +80,7 @@ jobs:
     name: Push backend Docker image
     runs-on: ubuntu-latest
     needs: tests
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
 
@@ -94,12 +98,13 @@ jobs:
         with:
           context: ./backend/
           push: true
-          tags: lesstalkrus/kittygram_backend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/kittygram_backend:latest
 
   build_frontend_and_push:
     name: Push frontend Docker image
     runs-on: ubuntu-latest
     needs: frontend_tests
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
 
@@ -117,11 +122,12 @@ jobs:
         with:
           context: ./frontend/
           push: true
-          tags: lesstalkrus/kittygram_frontend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/kittygram_frontend:latest
 
   build_gateway_and_push:
     name: Push gateway Docker image
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
 
@@ -139,7 +145,7 @@ jobs:
         with:
           context: ./nginx/
           push: true
-          tags: lesstalkrus/kittygram_gateway:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/kittygram_gateway:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -147,6 +153,7 @@ jobs:
       - build_backend_and_push
       - build_frontend_and_push
       - build_gateway_and_push
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Check out repo (for compose file)
@@ -182,10 +189,18 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs: deploy
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Telegram notify
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: "Kittygram: деплой успешно выполнен."
+          message: |
+            ✅ Kittygram: деплой завершён
+            Репозиторий: ${{ github.repository }}
+            Ветка: ${{ github.ref_name }}
+            Автор: ${{ github.actor }}
+            Коммит: ${{ github.event.head_commit.message }}
+            SHA: ${{ github.sha }}
+            Ссылка: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
