@@ -1,6 +1,6 @@
 # 🐾 Kittygram
 
-![Kittygram workflow status](https://github.com/LessTalkRus/kittygram_final/actions/workflows/kittygram_workflow.yml/badge.svg)
+[![Main Kittygram workflow](https://github.com/LessTalkRus/kittygram_final/actions/workflows/main.yml/badge.svg)](https://github.com/LessTalkRus/kittygram_final/actions/workflows/main.yml)
 
 **Kittygram** — это веб‑приложение, где пользователи делятся фото питомцев, ставят лайки и просматривают котиков других участников.  
 Проект на **Django + React**, упакован в Docker и развёрнут через **Nginx** и **GitHub Actions CI/CD**.
