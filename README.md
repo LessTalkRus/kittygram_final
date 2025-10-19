@@ -26,16 +26,16 @@ cd kittygram_final
 ### 2) .env (в корне проекта)
 ```env
 POSTGRES_USER=django_user
-POSTGRES_PASSWORD=mysecretpassword
+POSTGRES_PASSWORD=your_secure_password
 POSTGRES_DB=django
 DB_HOST=db
 DB_PORT=5432
 
-SECRET_KEY=*Ваш секретный ключ*
+SECRET_KEY=your_secret_key
 DEBUG=False
 
-ALLOWED_HOSTS=mykittygram67dev.servemp3.com,127.0.0.1,localhost
-CSRF_TRUSTED_ORIGINS=https://mykittygram67dev.servemp3.com
+ALLOWED_HOSTS=yourkittygram.domain.com,127.0.0.1,localhost
+CSRF_TRUSTED_ORIGINS=https://yourkittygram.domain.com
 ```
 
 ### 3) Сборка и запуск
@@ -48,8 +48,8 @@ docker compose up -d --build
 
 ## 🧩 Volumes
 
-| Volume  | Назначение |
-|---------|------------|
+| Volume    | Назначение |
+|-----------|------------|
 | `pg_data` | Данные PostgreSQL |
 | `static`  | Статика (общий для backend, frontend, gateway) |
 | `media`   | Медиа, загружаемые пользователями |
